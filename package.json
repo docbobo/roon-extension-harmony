@@ -1,9 +1,9 @@
 {
   "name": "roon-extension-harmony",
-  "version": "1.0.0",
-  "description": "Roon Extension to let Roon control Logitech Harmony Hubs",
+  "version": "0.0.1",
+  "description": "Roon Extension to let Roon control Logitech Harmony hubs",
   "main": "app.js",
-  "author": "boris@pruessmann.org",
+  "author": "Doc Bobo <boris@pruessmann.org> (https://blog.pruessmann.org/)",
   "license": "Apache-2.0",
   "dependencies": {
     "debug": "^2.1.0",
