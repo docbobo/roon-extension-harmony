@@ -1,12 +1,16 @@
 "use strict";
 
 var debug                = require('debug')('roon-extension-harmony'),
+    debug_keepalive      = require('debug')('roon-extension-harmony:keepalive'),
     RoonApi              = require('node-roon-api'),
     RoonApiStatus        = require('node-roon-api-status'),
     RoonApiSettings      = require('node-roon-api-settings'),
     RoonApiSourceControl = require('node-roon-api-source-control'),
     Discover             = require('harmonyhubjs-discover'),
     Harmony              = require('harmonyhubjs-client');
+
+var util = require('util');
+var EventEmitter = require('events').EventEmitter;
 
 const STATE_HUB_OFF           = 0;
 const STATE_ACTIVITY_STARTING = 1;
@@ -21,6 +25,8 @@ const STATE_HUB_TURNING_OFF   = 3;
 function HarmonyHub(name, address) {
     this.name = name;
     this.address = address;
+
+    EventEmitter.call(this)
 }
 
 /**
@@ -29,10 +35,16 @@ function HarmonyHub(name, address) {
 HarmonyHub.prototype.createClient = function() {
     debug("HarmonyHub.createClient: Creating Harmony client for %s (%s)", this.name, this.address);
 
+    var self = this;
+
     var result = Harmony(this.address);
     return result.then((client) => {
         client._xmppClient.connection.socket.setTimeout(0);
         client._xmppClient.connection.socket.setKeepAlive(true, 10000);
+
+        client.on('stateDigest', stateDigest => {
+            self.emit('stateDigest', stateDigest);
+        });
 
         return result;
     });
@@ -41,6 +53,8 @@ HarmonyHub.prototype.createClient = function() {
 HarmonyHub.prototype.toString = function() {
     return this.name;
 }
+
+util.inherits(HarmonyHub, EventEmitter);
 
 /**
  * Creates a new HarmonyDiscovery intances. This class will keep track of all the Harmony hubs that are discovered on
@@ -198,55 +212,39 @@ function setup_harmony_connection(harmonyHub) {
                                 }
                             };
 
+                            harmonyHub.on('stateDigest', stateDigest => {
+                                debug("stateDigest[%s]: state for '%s' => %s", activity.label, stateDigest.activityId, stateDigest.activityStatus);
+
+                                var status;
+                                switch (stateDigest.activityStatus) {
+                                    case STATE_ACTIVITY_STARTING:
+                                    case STATE_ACTIVITY_STARTED:
+                                        status = stateDigest.activityId == activity.id ? "selected" : "standby";
+                                        break;
+
+                                    default:
+                                        status = "standby";
+                                }
+
+                                if (device.status != status) {
+                                    device.status = status;
+                                    harmony.activities[activity.id].update_state({ status: status });
+                                }
+                            });
+
                             harmony.activities[activity.id] = svc_source_control.new_device(device);
                         }
                     });
 
                     harmonyClient.keepalive = setInterval(() => {
                         harmonyClient.getCurrentActivity().then((val) => {
-                            debug("Keep-Alive: getCurrentActivity() == %s", val);
+                            debug_keepalive("Keep-Alive: getCurrentActivity() == %s", val);
                         });
                     }, 30000);
 
                     harmonyClient._xmppClient.on('offline', () => {
                         debug("Harmony Hub went offline...");
                         setup_harmony_connection(harmonyHub);
-                    });
-
-                    harmonyClient.on('stateDigest', (val) => {
-                        debug("stateDigest: state for '%s' => %s", val.activityId,  val.activityStatus);
-                        for (var key in harmony.activities) {
-                            if (key == val.activityId) {
-                                switch (val.activityStatus) {
-                                    case STATE_ACTIVITY_STARTING:
-                                    case STATE_ACTIVITY_STARTED:
-                                        harmony.activities[key].update_state({ status: "selected" });
-                                        break;
-
-                                    case STATE_HUB_OFF:
-                                        harmony.activities[key].update_state({ status: "standby" });
-                                        break;
-
-                                    default:
-                                        // Ignoring
-                                        break;
-                                }
-                            } else {
-                                switch (val.activityStatus) {
-                                    case STATE_ACTIVITY_STARTED:
-                                        harmony.activities[key].update_state({ status: "standby" });
-                                        break;
-
-                                    case STATE_HUB_OFF:
-                                        harmony.activities[key].update_state({ status: "standby" });
-                                        break;
-
-                                    default:
-                                        // Ignoring
-                                        break;
-                                }
-                            }
-                        }
                     });
 
                     svc_status.set_status("Connected to Harmony Hub " + harmonyHub.name, false);
