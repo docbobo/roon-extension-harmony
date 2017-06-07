@@ -206,7 +206,7 @@ function setup_harmony_connection(harmonyHub) {
                         harmonyClient.getCurrentActivity().then((val) => {
                             debug("Keep-Alive: getCurrentActivity() == %s", val);
                         });
-                    }, 10000);
+                    }, 30000);
 
                     harmonyClient._xmppClient.on('offline', () => {
                         debug("Harmony Hub went offline...");
