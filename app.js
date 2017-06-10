@@ -110,7 +110,7 @@ function make_layout(settings) {
     l.layout.push({
        type:     "dropdown",
        title:    "Harmony Hub",
-       subtitle: "Select a Harmony Hub from the list of hubs discovered on the local network."
+       subtitle: "Select a Harmony Hub from the list of hubs discovered on the local network.",
        values:   hubs,
        setting:  "hostname",
    });
