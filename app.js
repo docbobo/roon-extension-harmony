@@ -105,7 +105,7 @@ function make_layout(settings) {
     };
 
     var hubs = harmonyDiscovery.hubs.map((entry) => {
-        return { title: entry.name + "(" + entry.address + ")", value: entry.address }
+        return { title: entry.name, value: entry.address }
     });
     l.layout.push({
        type:    "dropdown",
