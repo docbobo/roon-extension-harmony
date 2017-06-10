@@ -108,10 +108,11 @@ function make_layout(settings) {
         return { title: entry.name, value: entry.address }
     });
     l.layout.push({
-       type:    "dropdown",
-       title:   "Harmony Hub",
-       values:  hubs,
-       setting: "hostname",
+       type:     "dropdown",
+       title:    "Harmony Hub",
+       subtitle: "Select a Harmony Hub from the list of hubs discovered on the local network."
+       values:   hubs,
+       setting:  "hostname",
    });
 
     return l;
