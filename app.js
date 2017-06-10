@@ -104,18 +104,12 @@ function make_layout(settings) {
         has_error: false
     };
 
-    l.layout.push({
-        type:      "text",
-        title:     "Harmony Hub",
-        subtitle:  "Please select a discovered Harmony Hub."
-    });
-
     var hubs = harmonyDiscovery.hubs.map((entry) => {
         return { title: entry.name + "(" + entry.address + ")", value: entry.address }
     });
     l.layout.push({
        type:    "dropdown",
-       title:   "Address",
+       title:   "Harmony Hub",
        values:  hubs,
        setting: "hostname",
    });
