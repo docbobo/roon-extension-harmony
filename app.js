@@ -109,10 +109,13 @@ function make_layout(settings) {
         title:     "Please enter the hostname or IP address of the Harmony Hub."
     });
 
+    var hubs = harmonyDiscovery.hubs.map((entry) => {
+        return { title: entry.name + "(" + entry.address + ")", value: entry.address }
+    });
     l.layout.push({
        type:    "dropdown",
        title:   "Address",
-       values:  harmonyDiscovery.hubs.map((entry) => { return { value: entry.address } }),
+       values:  hubs,
        setting: "hostname",
    });
 
