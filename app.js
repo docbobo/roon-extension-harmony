@@ -228,6 +228,7 @@ function setup_harmony_connection(harmonyHub) {
 
                                 if (device.status != status) {
                                     device.status = status;
+                                    debug("Calling update_state");
                                     harmony.activities[activity.id].update_state({ status: status });
                                 }
                             });
