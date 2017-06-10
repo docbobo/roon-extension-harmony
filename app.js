@@ -104,16 +104,15 @@ function make_layout(settings) {
         has_error: false
     };
 
-    l.layout.push({
-        type:      "text",
-        title:     "Please enter the hostname or IP address of the Harmony Hub."
+    var hubs = harmonyDiscovery.hubs.map((entry) => {
+        return { title: entry.name, value: entry.address }
     });
-
     l.layout.push({
-       type:    "dropdown",
-       title:   "Address",
-       values:  harmonyDiscovery.hubs.map((entry) => { return { value: entry.address } }),
-       setting: "hostname",
+       type:     "dropdown",
+       title:    "Harmony Hub",
+       subtitle: "Select a Harmony Hub from the list of hubs discovered on the local network.",
+       values:   hubs,
+       setting:  "hostname",
    });
 
     return l;
@@ -228,6 +227,7 @@ function setup_harmony_connection(harmonyHub) {
 
                                 if (device.status != status) {
                                     device.status = status;
+                                    debug("Calling update_state");
                                     harmony.activities[activity.id].update_state({ status: status });
                                 }
                             });
@@ -247,7 +247,7 @@ function setup_harmony_connection(harmonyHub) {
                         setup_harmony_connection(harmonyHub);
                     });
 
-                    svc_status.set_status("Connected to Harmony Hub " + harmonyHub.name, false);
+                    svc_status.set_status("Connected to Harmony Hub ''" + harmonyHub.name + "''", false);
                 });
             });
         }).catch((error) => {
