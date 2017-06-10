@@ -106,7 +106,8 @@ function make_layout(settings) {
 
     l.layout.push({
         type:      "text",
-        title:     "Please enter the hostname or IP address of the Harmony Hub."
+        title:     "Harmony Hub",
+        subtitle:  "Please select a discovered Harmony Hub."
     });
 
     var hubs = harmonyDiscovery.hubs.map((entry) => {
