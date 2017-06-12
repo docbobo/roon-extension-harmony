@@ -21,7 +21,7 @@ This extension exposes each of the "Activities" registered on the Harmony as its
 1. Install Git from https://git-scm.com/downloads.
    * Following the instructions for the Operating System you are running.
 
-1. Download the Alarm Clock extension.
+1. Download the Logitech Harmony extension.
 
    * Go to the [roon-extension-harmony](https://github.com/docbobo/roon-extension-harmony) page on [GitHub](https://github.com).
    * Click the green 'Clone or Download' button and select 'Download ZIP'.
@@ -48,4 +48,4 @@ This extension exposes each of the "Activities" registered on the Harmony as its
 
 ## Notes
 
-* Setups with more than one Roon Core on the network are not currently supported.
+* Setups with more than one Roon Core on the network are not currently tested.
