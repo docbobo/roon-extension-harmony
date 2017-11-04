@@ -1,6 +1,6 @@
 {
   "name": "roon-extension-harmony",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Roon Extension to let Roon control Logitech Harmony hubs",
   "main": "app.js",
   "author": "Doc Bobo <boris@pruessmann.org> (https://blog.pruessmann.org/)",
