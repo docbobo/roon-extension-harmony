@@ -7,7 +7,8 @@ var debug                = require('debug')('roon-extension-harmony'),
     RoonApiSettings      = require('node-roon-api-settings'),
     RoonApiSourceControl = require('node-roon-api-source-control'),
     Discover             = require('harmonyhubjs-discover'),
-    Harmony              = require('harmonyhubjs-client');
+    Harmony              = require('harmonyhubjs-client'),
+    PortFinder           = require('portfinder');
 
 var util = require('util');
 var EventEmitter = require('events').EventEmitter;
@@ -67,14 +68,24 @@ function HarmonyDiscovery() {
 
     self.hubs = [];
 
-    self._discover = new Discover(61991);
-    self._discover.on('update', function (hubs) {
-        debug('received update event from harmonyhubjs-discover. there are \'%d\' hubs: %O', hubs.length, hubs);
+    PortFinder.getPortPromise()
+        .then((port) => {
+            debug("Harmony Discovery - listening on port \'%d\'", port);
 
-        self.hubs = hubs.map((entry) => { return new HarmonyHub(entry.friendlyName, entry.ip); });
-    });
+            self._discover = new Discover(port);
+            self._discover.on('update', function (hubs) {
+                debug("received update event from harmonyhubjs-discover. there are \'%d\' hubs: %O", hubs.length, hubs);
 
-    self._discover.start();
+                self.hubs = hubs.map((entry) => { return new HarmonyHub(entry.friendlyName, entry.ip); });
+            });
+
+            self._discover.start();
+        })
+        .catch((error) => {
+            debug("HarmonyDiscovery - Failed to find available port.", activity.id);
+
+            console.log(error);
+        });
 }
 
 var harmonyDiscovery = new HarmonyDiscovery();
@@ -82,7 +93,7 @@ var harmonyDiscovery = new HarmonyDiscovery();
 var roon = new RoonApi({
     extension_id:        'org.pruessmann.roon.logitech.harmony',
     display_name:        'Logitech Harmony',
-    display_version:     '0.0.5',
+    display_version:     '0.0.6',
     publisher:           'Doc Bobo',
     email:               'boris@pruessmann.org',
     website:             'https://github.com/docbobo/roon-extension-harmony',
