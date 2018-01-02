@@ -1,6 +1,6 @@
 {
   "name": "roon-extension-harmony",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Roon Extension to let Roon control Logitech Harmony hubs",
   "main": "app.js",
   "author": "Doc Bobo <boris@pruessmann.org> (https://blog.pruessmann.org/)",
@@ -8,8 +8,9 @@
   "private": true,
   "dependencies": {
     "debug": "^3.1.0",
+    "portfinder": "^1.0.0",
     "harmonyhubjs-client": "^1.1.0",
-    "harmonyhubjs-discover": "^1.0.0",
+    "harmonyhubjs-discover": "^1.1.0",
     "node-roon-api": "github:roonlabs/node-roon-api#caca92e99fd6becfc97761d32333cf4cd914b438",
     "node-roon-api-settings": "github:roonlabs/node-roon-api-settings#67cd8ca156c5bcd01ea63833ceaaec6d6a79654d",
     "node-roon-api-source-control": "github:roonlabs/node-roon-api-source-control#31ba0da65baab2261df35b0c787516e6064532d6",
