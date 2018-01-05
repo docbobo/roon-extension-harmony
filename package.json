@@ -5,7 +5,6 @@
   "main": "app.js",
   "author": "Doc Bobo <boris@pruessmann.org> (https://blog.pruessmann.org/)",
   "license": "Apache-2.0",
-  "private": true,
   "dependencies": {
     "debug": "^3.1.0",
     "portfinder": "^1.0.0",
