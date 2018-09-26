@@ -93,7 +93,7 @@ var harmonyDiscovery = new HarmonyDiscovery();
 var roon = new RoonApi({
     extension_id:        'org.pruessmann.roon.logitech.harmony',
     display_name:        'Logitech Harmony',
-    display_version:     '0.0.6',
+    display_version:     '0.0.7',
     publisher:           'Doc Bobo',
     email:               'boris@pruessmann.org',
     website:             'https://github.com/docbobo/roon-extension-harmony',
