@@ -93,7 +93,7 @@ var harmonyDiscovery = new HarmonyDiscovery();
 var roon = new RoonApi({
     extension_id:        'org.pruessmann.roon.logitech.harmony',
     display_name:        'Logitech Harmony',
-    display_version:     '0.0.7',
+    display_version:     '0.0.8',
     publisher:           'Doc Bobo',
     email:               'boris@pruessmann.org',
     website:             'https://github.com/docbobo/roon-extension-harmony',
@@ -188,6 +188,7 @@ function setup_harmony_connection(harmonyHub) {
                             debug("Creating Source Control Service for '%s'", activity.label);
                             var device = {
                                 state: {
+                                    control_key:      activity.id,
                                     display_name:     activity.label,
                                     supports_standby: true,
                                     status:           currentActivityId == activity.id ? "selected" : "standby",
